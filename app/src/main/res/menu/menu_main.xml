@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/Select_Graph" android:title="Select Graph" android:orderInCategory="101" android:visible="true" />
+    <item android:id="@+id/Enter_Values" android:title="Add Values" android:orderInCategory="102" android:visible="true" />
+    <item android:id="@+id/Export" android:title="Generate Report" android:orderInCategory="103" android:visible="true" />
+    <item android:id="@+id/Import" android:title="Import" android:orderInCategory="104" android:visible="true" />
+    <item android:id="@+id/Clear" android:title="Clear" android:orderInCategory="105" android:visible="true" />
+</menu>
