@@ -41,8 +41,8 @@
       <file leaf-file-name="HomeScreen.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tpl/arpitgoyal/arduino3/HomeScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.37209302">
-              <caret line="125" column="73" selection-start-line="125" selection-start-column="73" selection-end-line="125" selection-end-column="73" />
+            <state vertical-scroll-proportion="0.5008944">
+              <caret line="129" column="0" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
               <folding>
                 <element signature="e#1723#2360#0" expanded="true" />
                 <element signature="e#2359#2360#0" expanded="true" />
@@ -56,6 +56,7 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
+        <option value="Arpit Goyal &lt;arpit.go4@gmail.com&gt;" />
         <option value="Arpit Goyal" />
       </list>
     </option>
@@ -1932,7 +1933,13 @@
       <option name="project" value="LOCAL" />
       <updated>1463304422557</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Merge branch 'master' of https://github.com/arpitgo4/Graphino&#10;&#10;Conflicts:&#10;&#9;.gitignore&#10;">
+      <created>1463304498466</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1463304498466</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2080,8 +2087,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tpl/arpitgoyal/arduino3/HomeScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37209302">
-          <caret line="125" column="73" selection-start-line="125" selection-start-column="73" selection-end-line="125" selection-end-column="73" />
+        <state vertical-scroll-proportion="0.5008944">
+          <caret line="129" column="0" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
           <folding>
             <element signature="e#1723#2360#0" expanded="true" />
             <element signature="e#2359#2360#0" expanded="true" />
