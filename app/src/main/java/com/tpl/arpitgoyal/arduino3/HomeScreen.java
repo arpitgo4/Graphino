@@ -24,45 +24,16 @@ import java.util.Vector;
 public class HomeScreen extends Activity {
 
     private static final int REQUEST_ENABLE_BT = 1;
-
+    static BluetoothDevice mmDevice;
     ListView listDevicesFound;
     TextView btnScanDevice;
     TextView stateBluetooth;
     BluetoothAdapter bluetoothAdapter;
-    Vector<BluetoothDevice> devices = new Vector<BluetoothDevice>();
+    Vector<BluetoothDevice> devices = new Vector<>();
     BluetoothSocket mmSocket;
-    static BluetoothDevice mmDevice;
+    Context context;
 
     ArrayAdapter<String> btArrayAdapter;
-
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen);
-
-        btnScanDevice = (TextView) findViewById(R.id.textView2);
-
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        if(!bluetoothAdapter.isEnabled()) {
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth, 0);
-        }
-
-        listDevicesFound = (ListView)findViewById(R.id.listView);
-        btArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        listDevicesFound.setAdapter(btArrayAdapter);
-        listDevicesFound.setOnItemClickListener(listOnClickListener);
-
-//        CheckBlueToothState();
-
-        btnScanDevice.setOnClickListener(btnScanDeviceOnClickListener);
-
-        registerReceiver(ActionFoundReceiver,
-                new IntentFilter(BluetoothDevice.ACTION_FOUND));
-    }
-
     public ListView.OnItemClickListener listOnClickListener =
             new ListView.OnItemClickListener(){
                 @Override
@@ -75,6 +46,67 @@ public class HomeScreen extends Activity {
                     }
                 }
             };
+    private final BroadcastReceiver ActionFoundReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                devices.add(device);
+                btArrayAdapter.add(device.getName());
+                btArrayAdapter.notifyDataSetChanged();
+                Toast.makeText(context, "New Bluetooth Device Found", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+    private Button.OnClickListener btnScanDeviceOnClickListener
+            = new Button.OnClickListener() {
+
+        @Override
+        public void onClick(View arg0) {
+            // TODO Auto-generated method stub
+            if (!bluetoothAdapter.isEnabled()) {
+                Toast.makeText(HomeScreen.this, "Bluetooth Is Off", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            btArrayAdapter.clear();
+            Toast.makeText(context, "Searching For Bluetooth Devices", Toast.LENGTH_LONG).show();
+            bluetoothAdapter.startDiscovery();
+        }
+    };
+
+    /**
+     * Called when the activity is first created.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home_screen);
+
+        btnScanDevice = (TextView) findViewById(R.id.textView2);
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        context = HomeScreen.this;
+
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBluetooth, 0);
+        }
+
+        listDevicesFound = (ListView) findViewById(R.id.listView);
+        btArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        listDevicesFound.setAdapter(btArrayAdapter);
+        listDevicesFound.setOnItemClickListener(listOnClickListener);
+
+//        CheckBlueToothState();
+
+        btnScanDevice.setOnClickListener(btnScanDeviceOnClickListener);
+
+        registerReceiver(ActionFoundReceiver,
+                new IntentFilter(BluetoothDevice.ACTION_FOUND));
+    }
 
     @Override
     protected void onDestroy() {
@@ -83,39 +115,11 @@ public class HomeScreen extends Activity {
         unregisterReceiver(ActionFoundReceiver);
     }
 
-    private Button.OnClickListener btnScanDeviceOnClickListener
-            = new Button.OnClickListener(){
-
-        @Override
-        public void onClick(View arg0) {
-            // TODO Auto-generated method stub
-            if(!bluetoothAdapter.isEnabled()){
-                Toast.makeText(HomeScreen.this, "Bluetooth Is Off", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            btArrayAdapter.clear();
-            bluetoothAdapter.startDiscovery();
-        }};
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         if(requestCode == REQUEST_ENABLE_BT){}
     }
-
-    private final BroadcastReceiver ActionFoundReceiver = new BroadcastReceiver(){
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-            String action = intent.getAction();
-            if(BluetoothDevice.ACTION_FOUND.equals(action)) {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                devices.add(device);
-                btArrayAdapter.add(device.getName());
-                btArrayAdapter.notifyDataSetChanged();
-            }
-        }};
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
