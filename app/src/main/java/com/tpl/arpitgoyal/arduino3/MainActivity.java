@@ -27,7 +27,6 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -35,6 +34,8 @@ import java.io.OutputStreamWriter;
 import java.util.Random;
 import java.util.UUID;
 import java.util.Vector;
+
+import mockDevice.MockDevice;
 
 
 public class MainActivity extends Activity {
@@ -48,9 +49,9 @@ public class MainActivity extends Activity {
     boolean cleared = true;
     public static DataPoint[] datapoints = null;
     public DataPoint datapoint = null;
-    public static Vector<Double> dataX = new Vector<Double>();
-    public static Vector<Double> dataY = new Vector<Double>();
-    public static Vector<DataPoint> datapoints_all = new Vector<DataPoint>();
+    public static Vector<Double> dataX = new Vector<>();
+    public static Vector<Double> dataY = new Vector<>();
+    public static Vector<DataPoint> datapoints_all = new Vector<>();
     public static int counter = 0;
     public static int temp_counter = 0;
     private double maxX = 50;
@@ -275,28 +276,45 @@ public class MainActivity extends Activity {
         }
     };
 
-    public void openBT() throws IOException {
+    public void openBT() {
         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Standard
         //SerialPortService ID
-        mmSocket = HomeScreen.mmDevice.createRfcommSocketToServiceRecord(uuid);
-        mmSocket.connect();
-        mmOutputStream = mmSocket.getOutputStream();
-        mmInputStream = mmSocket.getInputStream();
+        try {
+            mmSocket = HomeScreen.mmDevice.createRfcommSocketToServiceRecord(uuid);
+            mmSocket.connect();
+            mmOutputStream = mmSocket.getOutputStream();
+            mmInputStream = mmSocket.getInputStream();
+            Toast.makeText(this, "Connection Established With " + HomeScreen.mmDevice.getName(), Toast.LENGTH_LONG).show();
+        }catch(Exception e){
+            Toast.makeText(MainActivity.this, "Unable to connect to bluetooth device.", Toast.LENGTH_LONG).show();
+            /*
+             injecting mock device's output and input stream
+              */
+            MockDevice device = new MockDevice();
+            mmOutputStream = device.getOutputStream();
+            mmInputStream = device.getInputStream();
+            Toast.makeText(MainActivity.this, "Connection established with mock device", Toast.LENGTH_LONG).show();
+        }
         writer = new OutputStreamWriter(mmOutputStream);
         reader = new BufferedReader(new InputStreamReader(mmInputStream));
-        Toast.makeText(this, "Connection Established With " + HomeScreen.mmDevice.getName(), Toast.LENGTH_LONG).show();
     }
 
     Vector<Double> load = new Vector<Double>();
     Vector<Double> disp = new Vector<Double>();
     Vector<Double> time = new Vector<Double>();
 
+    /**
+     * Data Format that app is expecting from arduino
+     * circuit is
+     * reader.readLine() -> load, displacement, time
+     */
     public void getResetData(){
         String s = "" ;
         int count = 0;
         load.clear(); disp.clear(); time.clear();
         try {
                     s = reader.readLine();
+            Thread.sleep(500);
                     String[] vals = s.split(",");
                     load.add(new Double(vals[0]));
                     disp.add(new Double(vals[1]));

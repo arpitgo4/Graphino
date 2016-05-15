@@ -140,6 +140,9 @@ public class HomeScreen extends Activity {
           //  startActivity(new Intent(HomeScreen.this, ImportActivity.class));
             new Import(HomeScreen.this, HomeScreen.this).showFiles();
             return true;
+        }else if(id == R.id.demo){
+            startActivity(new Intent(HomeScreen.this, MainActivity.class));
+            Toast.makeText(context, "Starting Demo With Mock Device", Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }
